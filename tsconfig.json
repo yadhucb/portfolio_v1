@@ -6,18 +6,26 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node"]
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["index.tsx", "App.tsx", "constants.tsx", "types.ts", "geminiService.ts"],
-  "node_modules": ["node_modules"]
+  "include": [
+    "index.tsx", 
+    "App.tsx", 
+    "constants.tsx", 
+    "types.ts", 
+    "geminiService.ts", 
+    "vite.config.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }

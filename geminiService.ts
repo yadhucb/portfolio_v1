@@ -1,39 +1,31 @@
 
-import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
-import { SYSTEM_INSTRUCTION } from "./constants";
+import { GoogleGenAI } from "@google/genai";
 
-export class PortfolioAI {
-  private chat: Chat | null = null;
-  private ai: GoogleGenAI;
-
-  constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-  }
-
-  async initChat() {
-    this.chat = this.ai.chats.create({
-      model: "gemini-3-flash-preview",
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.7,
-        topP: 0.95,
-      },
-    });
-  }
-
-  async sendMessage(message: string): Promise<string> {
-    if (!this.chat) {
-      await this.initChat();
-    }
+/**
+ * Service to interact with the Google Gemini API.
+ * Follows the @google/genai coding guidelines.
+ */
+export const aiService = {
+  /**
+   * Generates a text response using the gemini-3-flash-preview model.
+   * @param prompt The message to send to the model.
+   * @returns The generated text.
+   */
+  generateResponse: async (prompt: string) => {
+    // Correct initialization with named parameter.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     try {
-      const response = await this.chat!.sendMessage({ message });
-      return response.text || "I'm sorry, I couldn't process that. Try again!";
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: prompt,
+      });
+
+      // Directly accessing the .text property (not a method).
+      return response.text;
     } catch (error) {
-      console.error("Gemini Error:", error);
-      return "There was an error connecting to my neural net. Please try again later.";
+      console.error("Gemini API Error:", error);
+      throw error;
     }
   }
-}
-
-export const aiService = new PortfolioAI();
+};
